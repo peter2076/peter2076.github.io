@@ -960,7 +960,6 @@ const boxHorse = buildBoxHorse();
 horseModel.add(boxHorse);
 
 const HORSE_GLB_URLS = [
-  './horse.glb',
   'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/models/gltf/Horse.glb',
 ];
 function tryLoadGLB(urls) {
@@ -1613,20 +1612,21 @@ const hudAlt = document.getElementById('hud-alt');
 const hudFps = document.getElementById('hud-fps');
 
 function updateHUD() {
-  hudSpeed.textContent = (Math.abs(state.speed)).toFixed(1);
+  if (hudSpeed) hudSpeed.textContent = (Math.abs(state.speed)).toFixed(1);
   const b = biomeAt(horse.position.x, horse.position.z);
-  if (hudBiome.textContent !== b.name) {
-    hudBiome.textContent = b.name;
+  const biomeLabel = (typeof BIOME_CN !== 'undefined' && BIOME_CN[b.name]) ? BIOME_CN[b.name] : b.name;
+  if (hudBiome && hudBiome.textContent !== biomeLabel) {
+    hudBiome.textContent = biomeLabel;
     document.getElementById('hud').classList.add('flash');
     setTimeout(() => document.getElementById('hud').classList.remove('flash'), 300);
   }
-  hudAlt.textContent = `${horse.position.y.toFixed(0)} m`;
+  if (hudAlt) hudAlt.textContent = `${horse.position.y.toFixed(0)} m`;
 
   state.fpsCount++;
   const now = performance.now();
   if (now - state.fpsLast > 500) {
     const fps = (state.fpsCount * 1000 / (now - state.fpsLast)) | 0;
-    hudFps.textContent = fps;
+    if (hudFps) hudFps.textContent = fps;
     state.fpsCount = 0;
     state.fpsLast = now;
   }
