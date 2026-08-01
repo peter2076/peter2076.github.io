@@ -3,19 +3,19 @@
 :root {
   --ink: #1c1712;
   --ink-soft: #3a3228;
-  --paper: #f3ebe0;
-  --sand: #e2d2b8;
-  --dust: #c4a574;
-  --amber: #c47a2c;
-  --lamp: #e8a04a;
-  --sage: #5f6f4e;
-  --sage-deep: #3d4a32;
-  --river: #4a6b6e;
-  --dusk: #2a3340;
-  --night: #141820;
-  --glow: rgba(232, 160, 74, 0.35);
-  --line: rgba(28, 23, 18, 0.12);
-  --card-bg: rgba(243, 235, 224, 0.92);
+  --paper: #eef2ea;
+  --sand: #d5ddd0;
+  --dust: #a8b59a;
+  --amber: #b8862d;
+  --lamp: #e0a84a;
+  --sage: #4f6a55;
+  --sage-deep: #2f4536;
+  --river: #3f5f66;
+  --dusk: #243038;
+  --night: #12181c;
+  --glow: rgba(224, 168, 74, 0.32);
+  --line: rgba(36, 48, 56, 0.14);
+  --card-bg: rgba(238, 242, 234, 0.94);
   --radius: 4px;
   --shadow: 0 18px 50px rgba(20, 24, 32, 0.28);
   --font-display: 'Fraunces', Georgia, serif;
@@ -204,7 +204,16 @@ ul { margin: 0 0 1em; padding-left: 1.2em; }
   letter-spacing: 0.02em;
   color: #fff8ef;
   text-shadow: 0 8px 40px rgba(0,0,0,0.35);
-  margin-bottom: 0.35em;
+  margin-bottom: 0.15em;
+}
+.hero-en {
+  font-size: clamp(0.85rem, 1.6vw, 1rem);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--lamp);
+  opacity: 0.9;
+  margin: 0 0 0.9rem;
+  font-weight: 400;
 }
 .hero-tag {
   max-width: 28rem;
@@ -263,8 +272,9 @@ ul { margin: 0 0 1em; padding-left: 1.2em; }
 /* ---------- Panels / Codex ---------- */
 .panel-page {
   background:
-    radial-gradient(ellipse 70% 40% at 10% 0%, rgba(196,122,44,0.12), transparent 50%),
-    linear-gradient(180deg, #f7f1e7 0%, #ebe1d0 100%);
+    radial-gradient(ellipse 70% 40% at 10% 0%, rgba(79,106,85,0.14), transparent 50%),
+    radial-gradient(ellipse 50% 35% at 90% 10%, rgba(224,168,74,0.10), transparent 45%),
+    linear-gradient(180deg, #eef2ea 0%, #dfe8df 100%);
   color: var(--ink);
   min-height: calc(100vh - 64px);
 }
