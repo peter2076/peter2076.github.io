@@ -155,6 +155,102 @@
     font-size: 14px; color: var(--hud-accent); pointer-events: none;
   }
   .flash { animation: flash 0.3s ease-out; }
+
+  /* Minimap */
+  #minimap-wrap {
+    position: fixed; bottom: 16px; right: 16px; z-index: 12;
+    width: 160px; height: 160px; border-radius: 50%;
+    border: 2px solid var(--hud-border); overflow: hidden;
+    background: rgba(20,16,12,0.85); box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+  #minimap { width: 100%; height: 100%; display: block; }
+  #minimap-label {
+    position: absolute; bottom: 6px; left: 0; right: 0; text-align: center;
+    font-size: 10px; color: var(--hud-accent); pointer-events: none;
+  }
+  /* Tool hotbar */
+  #hotbar {
+    position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 6px; z-index: 12; pointer-events: none;
+  }
+  .hotbar-slot {
+    width: 48px; height: 48px; background: var(--hud-bg);
+    border: 1px solid var(--hud-border); border-radius: 10px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-size: 18px; position: relative;
+  }
+  .hotbar-slot.active { border-color: var(--hud-accent); box-shadow: 0 0 12px rgba(212,168,83,0.35); }
+  .hotbar-slot .num {
+    position: absolute; top: 2px; left: 5px; font-size: 9px; opacity: 0.5;
+  }
+  .hotbar-slot .cnt {
+    position: absolute; bottom: 2px; right: 5px; font-size: 9px; color: var(--hud-accent);
+  }
+  /* Inventory */
+  #inv-panel {
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    width: min(420px, 92vw); background: rgba(20,16,12,0.95);
+    border: 1px solid var(--hud-border); border-radius: 14px;
+    padding: 24px; z-index: 70; display: none; backdrop-filter: blur(12px);
+  }
+  #inv-panel.open { display: block; }
+  #inv-panel h2 {
+    font-family: 'Noto Serif SC', serif; color: var(--hud-accent);
+    font-size: 1.1rem; margin-bottom: 14px; padding-bottom: 10px;
+    border-bottom: 1px solid var(--hud-border);
+  }
+  .inv-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .inv-item {
+    background: rgba(212,168,83,0.06); border: 1px solid var(--hud-border);
+    border-radius: 8px; padding: 12px; text-align: center; font-size: 0.8rem;
+  }
+  .inv-item .ico { font-size: 1.6rem; margin-bottom: 4px; }
+  .inv-item .nm { color: var(--hud-fg); }
+  .inv-item .qty { color: var(--hud-accent); font-size: 0.75rem; margin-top: 2px; }
+  #inv-panel .hint { margin-top: 14px; font-size: 0.75rem; opacity: 0.5; text-align: center; }
+  /* Sketch overlay */
+  #sketch-overlay {
+    position: fixed; inset: 0; z-index: 80; display: none;
+    background: rgba(10,8,6,0.55); align-items: center; justify-content: center;
+  }
+  #sketch-overlay.open { display: flex; }
+  #sketch-frame {
+    width: min(480px, 90vw); background: #f4e8d4; border-radius: 8px;
+    padding: 20px; box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+    color: #2c2418; text-align: center;
+  }
+  #sketch-frame h3 { font-family: 'Noto Serif SC', serif; margin-bottom: 8px; }
+  #sketch-canvas {
+    width: 100%; height: 220px; border-radius: 4px; margin: 12px 0;
+    background: #efe4d0; display: block;
+  }
+  #sketch-frame .progress {
+    height: 6px; background: #d4c4a8; border-radius: 3px; overflow: hidden; margin: 10px 0;
+  }
+  #sketch-frame .progress span {
+    display: block; height: 100%; background: #a0522d; width: 0%; transition: width 0.1s;
+  }
+  #sketch-frame .sk-hint { font-size: 0.8rem; opacity: 0.65; }
+  /* Journal */
+  #journal-panel {
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    width: min(460px, 92vw); max-height: 70vh; overflow-y: auto;
+    background: rgba(20,16,12,0.95); border: 1px solid var(--hud-border);
+    border-radius: 14px; padding: 24px; z-index: 70; display: none;
+  }
+  #journal-panel.open { display: block; }
+  #journal-panel h2 {
+    font-family: 'Noto Serif SC', serif; color: var(--hud-accent);
+    margin-bottom: 14px; font-size: 1.1rem;
+  }
+  .j-entry {
+    padding: 12px; margin-bottom: 8px; border-radius: 8px;
+    background: rgba(212,168,83,0.06); border: 1px solid var(--hud-border);
+    font-size: 0.85rem;
+  }
+  .j-entry.done { opacity: 0.55; }
+  .j-entry h4 { color: var(--hud-accent); margin-bottom: 4px; }
+
   @keyframes flash {
     0% { background: rgba(212, 168, 83, 0.35); }
     100% { background: var(--hud-bg); }
@@ -206,9 +302,9 @@
 </div>
 
 <div id="controls">
-  <div><span class="key">W</span><span class="key">A</span><span class="key">S</span><span class="key">D</span> 骑行 · <span class="key">Shift</span> 疾驰 · <span class="key">Space</span> 跨越</div>
-  <div><span class="key">E</span> 互动 · <span class="key">F</span>/<span class="key">G</span> 调时 · <span class="key">1-4</span> 天气 · <span class="key">R</span> 回营</div>
-  <div><span class="key">鼠标</span> 环视 · <span class="key">ESC</span> 释放鼠标</div>
+  <div><span class="key">W A S D</span> 骑行 · <span class="key">Shift</span> 疾驰 · <span class="key">E</span> 互动 · <span class="key">R</span> 回营</div>
+  <div><span class="key">1-5</span> 工具 · <span class="key">C</span> 写生 · <span class="key">I</span> 背包 · <span class="key">J</span> 日志</div>
+  <div><span class="key">F</span>/<span class="key">G</span> 调时 · <span class="key">T</span> 天气轮换 · <span class="key">ESC</span> 释放鼠标</div>
 </div>
 
 <div id="prompt"><span class="ekey">E</span><span id="prompt-text">互动</span></div>
@@ -219,6 +315,43 @@
   <div class="continue" id="dlg-continue">按 E 继续</div>
 </div>
 <div id="toast"></div>
+
+<div id="minimap-wrap">
+  <canvas id="minimap" width="160" height="160"></canvas>
+  <div id="minimap-label">小地图</div>
+</div>
+
+<div id="hotbar">
+  <div class="hotbar-slot active" data-tool="hand"><span class="num">1</span>✋</div>
+  <div class="hotbar-slot" data-tool="shovel"><span class="num">2</span>⛏️<span class="cnt" id="cnt-herb">0</span></div>
+  <div class="hotbar-slot" data-tool="net"><span class="num">3</span>🎣<span class="cnt" id="cnt-fish">0</span></div>
+  <div class="hotbar-slot" data-tool="canvas"><span class="num">4</span>🎨<span class="cnt" id="cnt-art">0</span></div>
+  <div class="hotbar-slot" data-tool="scope"><span class="num">5</span>🔭<span class="cnt" id="cnt-obs">0</span></div>
+</div>
+
+<div id="inv-panel">
+  <h2>行囊背包</h2>
+  <div class="inv-grid" id="inv-grid"></div>
+  <div class="hint">按 I 关闭 · 物资可交付营地换取酬劳</div>
+</div>
+
+<div id="journal-panel">
+  <h2>旅途日志</h2>
+  <div id="journal-list"></div>
+  <div class="hint" style="margin-top:12px;font-size:0.75rem;opacity:0.5;text-align:center">按 J 关闭</div>
+</div>
+
+<div id="sketch-overlay">
+  <div id="sketch-frame">
+    <h3 id="sketch-title">风景写生</h3>
+    <p id="sketch-sub" style="font-size:0.85rem;opacity:0.7">正在描绘眼前的景色…</p>
+    <canvas id="sketch-canvas" width="440" height="220"></canvas>
+    <div class="progress"><span id="sketch-bar"></span></div>
+    <div class="sk-hint">按住完成写生 · Esc 取消</div>
+  </div>
+</div>
+
+
 
 <script type="importmap">
 {
@@ -1332,17 +1465,7 @@ window.addEventListener('keydown', (e) => {
   if (e.code === 'Space') { keys.space = true; jumpQueued = true; e.preventDefault(); }
   if (e.code === 'KeyF') timeAdjust = 1;
   if (e.code === 'KeyG') timeAdjust = -1;
-  if (e.code === 'Digit1') setWeather('clear');
-  if (e.code === 'Digit2') setWeather('rain');
-  if (e.code === 'Digit3') setWeather('snow');
-  if (e.code === 'Digit4') setWeather('fog');
-  if (e.code === 'KeyR') {
-    horse.position.set(40, heightAt(40, 40), 40);
-    state.yaw = 0; state.pitch = 0; state.velocityY = 0;
-  }
-  if (e.code === 'KeyF') {
-    setWeather(state.weather === 'clear' ? 'rain' : 'clear');
-  }
+  // Digit1-5 reserved for tools; weather via UI buttons or T
 });
 window.addEventListener('keyup', (e) => {
   if (e.code === 'KeyW') keys.w = false;
@@ -1361,12 +1484,20 @@ document.addEventListener('mousemove', (e) => {
   state.pitch = Math.max(-0.6, Math.min(0.9, state.pitch));
 });
 
+function isOverlayOpen() {
+  const dlg = document.getElementById('dialogue');
+  if (dlg && dlg.style.display === 'block') return true;
+  if (document.getElementById('inv-panel')?.classList.contains('open')) return true;
+  if (document.getElementById('journal-panel')?.classList.contains('open')) return true;
+  if (document.getElementById('sketch-overlay')?.classList.contains('open')) return true;
+  return false;
+}
+
 document.addEventListener('pointerlockchange', () => {
   state.pointerLocked = document.pointerLockElement === canvas;
   if (!state.pointerLocked) {
-    // Keep playing UI if dialogue is open; only show start overlay when truly paused
-    const dlg = document.getElementById('dialogue');
-    if (dlg && dlg.style.display === 'block') return;
+    // Keep playing UI when dialogue / inventory / journal / sketch is open
+    if (isOverlayOpen()) return;
     document.getElementById('start-screen').classList.remove('hidden');
   } else {
     document.getElementById('start-screen').classList.add('hidden');
@@ -1668,10 +1799,16 @@ requestAnimationFrame(animate);
    ============================================================= */
 const game = {
   stamina: 100, hunger: 80, warmth: 70, rep: 0, gold: 12,
-  wood: 0, horseFound: false, wagonFixed: false,
-  quest: null, // { id, title, desc, step }
+  wood: 0, horseFound: false, wagonFixed: false, chapter2Started: false,
+  quest: null,
   dialogue: null,
   toastTimer: 0,
+  tool: 'hand',
+  inv: { herb: 0, fish: 0, art: 0, obs: 0, wood: 0 },
+  journal: [],
+  sketching: false, sketchProgress: 0,
+  markers: [], // {x,z,color,label}
+  campCenter: { x: 55, z: -32 },
 };
 
 const BIOME_CN = {
@@ -2084,8 +2221,568 @@ window.addEventListener('keydown', (e) => {
 });
 
 spawnCamp();
-setQuest('meet', '遇见晨曦旅社', '靠近营地篝火旁的艾琳，按 E 与她交谈。');
+spawnGatherables();
+
+/* =============================================================
+   扩展系统：小地图 / 背包 / 写生 / 采药 / 钓鱼 / 存档
+   ============================================================= */
+const SAVE_KEY = 'dawnwind_save_v1';
+const minimap = document.getElementById('minimap');
+const mctx = minimap.getContext('2d');
+
+function spawnGatherables() {
+  // Herbs
+  for (let i = 0; i < 14; i++) {
+    const x = 30 + (Math.random() - 0.5) * 80;
+    const z = -20 + (Math.random() - 0.5) * 70;
+    if (heightAt(x, z) < 1) continue;
+    const g = new THREE.Group();
+    const leaf = new THREE.Mesh(
+      new THREE.SphereGeometry(0.25, 6, 6),
+      new THREE.MeshStandardMaterial({ color: 0x4a8a3a, roughness: 0.8 })
+    );
+    leaf.position.y = 0.3; leaf.scale.y = 0.6; g.add(leaf);
+    g.position.set(x, heightAt(x, z), z);
+    g.userData.interact = 'herb';
+    g.userData.label = '野生草药（采药铲采集）';
+    scene.add(g);
+    interactables.push(g);
+  }
+  // Fishing spots near water (low height)
+  let spots = 0, tries = 0;
+  while (spots < 6 && tries < 200) {
+    tries++;
+    const x = (Math.random() - 0.5) * WORLD * 0.6;
+    const z = (Math.random() - 0.5) * WORLD * 0.6;
+    const h = heightAt(x, z);
+    if (h > 0.5 && h < 3) {
+      const buoy = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.15, 0.15, 0.8, 6),
+        new THREE.MeshStandardMaterial({ color: 0xd4a060, emissive: 0x553300, emissiveIntensity: 0.3 })
+      );
+      buoy.position.set(x, h + 0.4, z);
+      buoy.userData.interact = 'fish';
+      buoy.userData.label = '渔获点（捕鱼网）';
+      scene.add(buoy);
+      interactables.push(buoy);
+      spots++;
+    }
+  }
+  // Viewpoint for sketching
+  const viewpoints = [
+    { x: 70, z: -10, name: '河湾远眺' },
+    { x: 40, z: -60, name: '平原落日' },
+    { x: 15, z: 5, name: '橡树坡' },
+  ];
+  for (const v of viewpoints) {
+    const post = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.12, 0.18, 1.6, 6),
+      new THREE.MeshStandardMaterial({ color: 0x8a6a40 })
+    );
+    const h = heightAt(v.x, v.z);
+    post.position.set(v.x, h + 0.8, v.z);
+    post.userData.interact = 'viewpoint';
+    post.userData.label = `写生点：${v.name}（画板 / C）`;
+    post.userData.viewName = v.name;
+    scene.add(post);
+    interactables.push(post);
+    // flag
+    const flag = new THREE.Mesh(
+      new THREE.PlaneGeometry(0.6, 0.4),
+      new THREE.MeshStandardMaterial({ color: 0xc47840, side: THREE.DoubleSide })
+    );
+    flag.position.set(v.x + 0.35, h + 1.5, v.z);
+    scene.add(flag);
+  }
+}
+
+function addQuestMarker(x, z, color = 0xd4a853) {
+  const ring = new THREE.Mesh(
+    new THREE.RingGeometry(0.8, 1.1, 24),
+    new THREE.MeshBasicMaterial({ color, side: THREE.DoubleSide, transparent: true, opacity: 0.7 })
+  );
+  ring.rotation.x = -Math.PI / 2;
+  ring.position.set(x, heightAt(x, z) + 0.15, z);
+  ring.userData.questMarker = true;
+  scene.add(ring);
+  game.markers.push(ring);
+  return ring;
+}
+
+function clearMarkers() {
+  game.markers.forEach(m => scene.remove(m));
+  game.markers = [];
+}
+
+function updateMarkersForQuest() {
+  clearMarkers();
+  if (!game.quest) return;
+  if (game.quest.id === 'meet' || game.quest.id === 'wagon' && !game.wood) {
+    // oak or elin
+    if (game.quest.id === 'meet') addQuestMarker(52, -31);
+    else if (!game.wood) addQuestMarker(20, 10, 0x6b9e5a);
+    else addQuestMarker(61, -30, 0xd4a853);
+  }
+  if (game.quest.id === 'wagon' && game.wood) addQuestMarker(61, -30);
+  if (game.quest.id === 'horse') addQuestMarker(10, -55, 0xe8c878);
+  if (game.quest.id === 'ch2') addQuestMarker(120, -40, 0x7a9eb5);
+}
+
+const _setQuest = setQuest;
+setQuest = function(id, title, desc) {
+  _setQuest(id, title, desc);
+  if (!game.journal.find(j => j.id === id && !j.done)) {
+    game.journal.push({ id, title, desc, done: false });
+  }
+  updateMarkersForQuest();
+  saveGame();
+  refreshJournal();
+};
+
+const _clearQuest = clearQuest;
+clearQuest = function() {
+  if (game.quest) {
+    const j = game.journal.find(x => x.id === game.quest.id && !x.done);
+    if (j) j.done = true;
+  }
+  _clearQuest();
+  clearMarkers();
+  saveGame();
+  refreshJournal();
+};
+
+function selectTool(tool) {
+  game.tool = tool;
+  document.querySelectorAll('.hotbar-slot').forEach(s => {
+    s.classList.toggle('active', s.dataset.tool === tool);
+  });
+  const names = { hand: '空手', shovel: '采药铲', net: '捕鱼网', canvas: '写生画板', scope: '望远镜' };
+  showToast(`装备：${names[tool] || tool}`);
+}
+
+function refreshInvUI() {
+  document.getElementById('cnt-herb').textContent = game.inv.herb;
+  document.getElementById('cnt-fish').textContent = game.inv.fish;
+  document.getElementById('cnt-art').textContent = game.inv.art;
+  document.getElementById('cnt-obs').textContent = game.inv.obs;
+  const grid = document.getElementById('inv-grid');
+  const items = [
+    { ico: '💰', nm: '金币', qty: game.gold },
+    { ico: '⭐', nm: '声望', qty: game.rep },
+    { ico: '🪵', nm: '橡木轴', qty: game.wood || game.inv.wood },
+    { ico: '🌿', nm: '草药', qty: game.inv.herb },
+    { ico: '🐟', nm: '渔获', qty: game.inv.fish },
+    { ico: '🖼️', nm: '风景画', qty: game.inv.art },
+    { ico: '📒', nm: '生态记录', qty: game.inv.obs },
+  ];
+  grid.innerHTML = items.map(i =>
+    `<div class="inv-item"><div class="ico">${i.ico}</div><div class="nm">${i.nm}</div><div class="qty">×${i.qty}</div></div>`
+  ).join('');
+}
+
+function refreshJournal() {
+  const list = document.getElementById('journal-list');
+  if (!game.journal.length) {
+    list.innerHTML = '<p style="opacity:0.6;font-size:0.9rem">尚无记录，去与艾琳交谈吧。</p>';
+    return;
+  }
+  list.innerHTML = game.journal.map(j =>
+    `<div class="j-entry ${j.done ? 'done' : ''}"><h4>${j.done ? '✅' : '📜'} ${j.title}</h4><p style="opacity:0.7">${j.desc}</p></div>`
+  ).join('');
+}
+
+function togglePanel(id) {
+  const el = document.getElementById(id);
+  const open = !el.classList.contains('open');
+  document.getElementById('inv-panel').classList.remove('open');
+  document.getElementById('journal-panel').classList.remove('open');
+  if (open) {
+    if (id === 'inv-panel') refreshInvUI();
+    if (id === 'journal-panel') refreshJournal();
+    el.classList.add('open');
+    document.exitPointerLock();
+  } else {
+    // Resume riding after closing panel
+    if (document.pointerLockElement !== canvas) {
+      canvas.requestPointerLock();
+      document.getElementById('start-screen').classList.add('hidden');
+    }
+  }
+}
+
+function startSketch(viewName) {
+  if (game.sketching) return;
+  game.sketching = true;
+  game.sketchProgress = 0;
+  document.getElementById('sketch-overlay').classList.add('open');
+  document.getElementById('sketch-title').textContent = viewName ? `写生 · ${viewName}` : '风景写生';
+  document.getElementById('sketch-sub').textContent = '屏息凝神，描绘眼前的西部风光…';
+  document.getElementById('sketch-bar').style.width = '0%';
+  document.exitPointerLock();
+  drawSketchPreview(viewName);
+}
+
+function drawSketchPreview(name) {
+  const c = document.getElementById('sketch-canvas');
+  const ctx = c.getContext('2d');
+  const g = ctx.createLinearGradient(0, 0, 0, c.height);
+  g.addColorStop(0, '#c4956a'); g.addColorStop(0.45, '#e8c878'); g.addColorStop(1, '#6b7c5e');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, c.width, c.height);
+  // hills
+  ctx.fillStyle = 'rgba(74,90,62,0.7)';
+  ctx.beginPath();
+  ctx.moveTo(0, c.height * 0.7);
+  for (let x = 0; x < c.width; x += 20) {
+    ctx.lineTo(x, c.height * (0.55 + Math.sin(x * 0.02) * 0.08));
+  }
+  ctx.lineTo(c.width, c.height); ctx.lineTo(0, c.height); ctx.fill();
+  ctx.fillStyle = 'rgba(44,36,24,0.15)';
+  ctx.font = '14px serif';
+  ctx.fillText(name || '西部风光', 16, c.height - 16);
+}
+
+function updateSketch(dt) {
+  if (!game.sketching) return;
+  game.sketchProgress = Math.min(100, game.sketchProgress + dt * 28);
+  document.getElementById('sketch-bar').style.width = game.sketchProgress + '%';
+  if (game.sketchProgress >= 100) finishSketch();
+}
+
+function finishSketch() {
+  game.sketching = false;
+  document.getElementById('sketch-overlay').classList.remove('open');
+  game.inv.art += 1;
+  game.rep += 3;
+  game.gold += 4;
+  showToast('完成一幅风景画！金币 +4 · 声望 +3');
+  refreshInvUI();
+  saveGame();
+  canvas.requestPointerLock();
+}
+
+function cancelSketch() {
+  if (!game.sketching) return;
+  game.sketching = false;
+  document.getElementById('sketch-overlay').classList.remove('open');
+  showToast('写生已取消');
+  canvas.requestPointerLock();
+}
+
+function tryUseTool() {
+  if (game.dialogue || game.sketching) return;
+  const obj = nearestInteractable();
+  if (game.tool === 'shovel') {
+    if (obj?.userData.interact === 'herb') {
+      obj.userData.collected = true; obj.visible = false;
+      game.inv.herb += 1; game.stamina = Math.max(0, game.stamina - 3);
+      showToast('采集草药 +1'); refreshInvUI(); saveGame(); return;
+    }
+    showToast('附近没有可采的草药');
+  }
+  if (game.tool === 'net') {
+    if (obj?.userData.interact === 'fish') {
+      obj.userData.collected = true; obj.visible = false;
+      game.inv.fish += 1; game.stamina = Math.max(0, game.stamina - 5);
+      showToast('钓上渔获 +1'); refreshInvUI(); saveGame(); return;
+    }
+    // also allow near water
+    const h = heightAt(horse.position.x, horse.position.z);
+    if (h < 2.5) {
+      if (Math.random() < 0.55) {
+        game.inv.fish += 1; showToast('钓上渔获 +1');
+      } else showToast('鱼儿溜走了，再试一次');
+      game.stamina = Math.max(0, game.stamina - 4);
+      refreshInvUI(); saveGame(); return;
+    }
+    showToast('需要靠近水域垂钓');
+  }
+  if (game.tool === 'canvas') {
+    const vn = obj?.userData.viewName || biomeAt(horse.position.x, horse.position.z).name;
+    startSketch(typeof vn === 'string' ? (BIOME_CN[vn] || vn) : '西部风光');
+  }
+  if (game.tool === 'scope') {
+    // observe nearby deer
+    let observed = false;
+    for (const deer of (typeof deerHerd !== 'undefined' ? deerHerd : [])) {
+      if (horse.position.distanceTo(deer.position) < 35) {
+        game.inv.obs += 1; game.rep += 1;
+        showToast('观测记录：白尾鹿 · 生态笔记 +1');
+        observed = true; refreshInvUI(); saveGame(); break;
+      }
+    }
+    if (!observed) showToast('用望远镜环顾…附近暂无野生动物');
+  }
+}
+
+// Sell goods at campfire when inventory has items
+DIALOGUES.sell = [
+  { speaker: '艾琳·布鲁克斯', text: '你带回的物产真不错。营地可以收购草药、渔获和画作，换些旅费。',
+    choices: [
+      { label: '交付全部物资', action: 'sell_all' },
+      { label: '下次再说', action: null },
+    ]},
+];
+DIALOGUES.ch2 = [
+  { speaker: '老山姆·里维拉', text: '马车修好了，驮马也回来了。东边的橡树镇或许能让我们短暂安顿。' },
+  { speaker: '老山姆·里维拉', text: '你愿意先去探探路吗？把沿途风光记下来，也算帮小玛莉完成田野笔记。',
+    choices: [
+      { label: '我去橡树镇方向看看', action: 'start_ch2' },
+      { label: '我再在营地歇歇', action: null },
+    ]},
+];
+DIALOGUES.ch2_arrive = [
+  { speaker: '系统', text: '你抵达了橡树镇方向的眺望点。远处炊烟袅袅——第二章「河湾小镇」的故事将在完整版中展开。' },
+  { speaker: '系统', text: '此刻，你已用善意与双手帮助晨曦旅社安顿下来。远风会记住你的名字。', action: 'ch2_done' },
+];
+
+const _runAction = runAction;
+runAction = function(action) {
+  _runAction(action);
+  if (action === 'sell_all') {
+    const earn = game.inv.herb * 3 + game.inv.fish * 4 + game.inv.art * 8 + game.inv.obs * 2;
+    if (earn <= 0) { showToast('行囊里没有可交付的物资'); return; }
+    game.gold += earn;
+    game.rep += Math.floor(earn / 5);
+    game.inv.herb = game.inv.fish = game.inv.art = game.inv.obs = 0;
+    showToast(`交付完成！获得金币 +${earn}`);
+    refreshInvUI(); saveGame();
+  }
+  if (action === 'start_ch2') {
+    game.chapter2Started = true;
+    setQuest('ch2', '东行探路', '前往东边眺望点（小地图青色标记），为社群探查橡树镇方向。');
+    showToast('新任务：东行探路');
+    // spawn viewpoint far east
+    const x = 120, z = -40;
+    const post = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.2, 0.25, 2.2, 6),
+      new THREE.MeshStandardMaterial({ color: 0x7a9eb5, emissive: 0x224455, emissiveIntensity: 0.4 })
+    );
+    post.position.set(x, heightAt(x, z) + 1.1, z);
+    post.userData.interact = 'ch2_point';
+    post.userData.label = '橡树镇方向眺望点';
+    scene.add(post);
+    interactables.push(post);
+    updateMarkersForQuest();
+  }
+  if (action === 'ch2_done') {
+    game.rep += 20; game.gold += 15;
+    clearQuest();
+    showToast('第一章完结 · 声望 +20 · 金币 +15');
+    game.journal.push({ id: 'ch1_end', title: '第一章完结', desc: '帮助晨曦旅社安顿，并探查了橡树镇方向。', done: true });
+    saveGame();
+  }
+  if (action === 'complete_quest_ch1_horse' || action === undefined) {}
+  // After horse quest dialogue from existing flow
+};
+
+// Hook horse_done to offer chapter 2
+const _horseDone = DIALOGUES.horse_done;
+DIALOGUES.horse_done = [
+  { speaker: '艾琳·布鲁克斯', text: '你找到了驮马！太感谢了。愿远风永远指引你的路。' },
+  { speaker: '艾琳·布鲁克斯', text: '山姆想和你谈谈东边的事——也许我们的旅程才刚刚开始。', action: 'after_horse' },
+];
+
+const _runAction2 = runAction;
+runAction = function(action) {
+  _runAction2(action);
+  if (action === 'after_horse') {
+    // delay open ch2 dialogue
+    setTimeout(() => openDialogue('ch2'), 400);
+  }
+};
+
+const _tryInteract = tryInteract;
+tryInteract = function() {
+  if (game.sketching) return;
+  if (game.dialogue) { advanceDialogue(); return; }
+  const obj = nearestInteractable();
+  if (obj?.userData.interact === 'herb' || obj?.userData.interact === 'fish') {
+    // require proper tool
+    if (obj.userData.interact === 'herb' && game.tool !== 'shovel') {
+      showToast('请切换到采药铲（按 2）再采集'); return;
+    }
+    if (obj.userData.interact === 'fish' && game.tool !== 'net') {
+      showToast('请切换到捕鱼网（按 3）再垂钓'); return;
+    }
+    tryUseTool(); return;
+  }
+  if (obj?.userData.interact === 'viewpoint') {
+    startSketch(obj.userData.viewName); return;
+  }
+  if (obj?.userData.interact === 'ch2_point') {
+    openDialogue('ch2_arrive'); return;
+  }
+  if (obj?.userData.interact === 'campfire' && (game.inv.herb + game.inv.fish + game.inv.art + game.inv.obs) > 0) {
+    // offer sell if has goods, else rest
+    openDialogue('sell'); return;
+  }
+  _tryInteract();
+  updateMarkersForQuest();
+};
+
+function drawMinimap() {
+  const W = 160, R = 80;
+  mctx.clearRect(0, 0, W, W);
+  // background disc
+  mctx.fillStyle = '#1a2418';
+  mctx.beginPath(); mctx.arc(R, R, R - 2, 0, Math.PI * 2); mctx.fill();
+
+  const scale = 0.55; // world units to px
+  const px = horse.position.x, pz = horse.position.z;
+
+  // sample terrain colors around player
+  for (let iy = -R; iy < R; iy += 4) {
+    for (let ix = -R; ix < R; ix += 4) {
+      if (ix * ix + iy * iy > (R - 4) * (R - 4)) continue;
+      const wx = px + ix / scale, wz = pz + iy / scale;
+      const b = biomeAt(wx, wz).name;
+      const cols = {
+        water: '#2a5080', snow: '#c8d8e8', rock: '#6a625a',
+        forest: '#2d5a1e', savanna: '#8a8a40', grass: '#4a7a30',
+      };
+      mctx.fillStyle = cols[b] || '#3a5a28';
+      mctx.fillRect(R + ix, R + iy, 4, 4);
+    }
+  }
+
+  // camp
+  const cdx = (game.campCenter.x - px) * scale;
+  const cdz = (game.campCenter.z - pz) * scale;
+  if (cdx * cdx + cdz * cdz < (R - 8) * (R - 8)) {
+    mctx.fillStyle = '#d4a853';
+    mctx.beginPath(); mctx.arc(R + cdx, R + cdz, 4, 0, Math.PI * 2); mctx.fill();
+  }
+
+  // quest markers
+  for (const m of game.markers) {
+    const dx = (m.position.x - px) * scale;
+    const dz = (m.position.z - pz) * scale;
+    if (dx * dx + dz * dz < (R - 6) * (R - 6)) {
+      mctx.fillStyle = '#e8c878';
+      mctx.beginPath(); mctx.arc(R + dx, R + dz, 3, 0, Math.PI * 2); mctx.fill();
+      mctx.strokeStyle = '#fff'; mctx.lineWidth = 1;
+      mctx.beginPath(); mctx.arc(R + dx, R + dz, 5, 0, Math.PI * 2); mctx.stroke();
+    }
+  }
+
+  // player arrow
+  mctx.save();
+  mctx.translate(R, R);
+  mctx.rotate(-state.yaw + Math.PI);
+  mctx.fillStyle = '#fff';
+  mctx.beginPath();
+  mctx.moveTo(0, -7); mctx.lineTo(5, 6); mctx.lineTo(0, 3); mctx.lineTo(-5, 6);
+  mctx.closePath(); mctx.fill();
+  mctx.restore();
+
+  // border ring
+  mctx.strokeStyle = 'rgba(212,168,83,0.5)';
+  mctx.lineWidth = 2;
+  mctx.beginPath(); mctx.arc(R, R, R - 2, 0, Math.PI * 2); mctx.stroke();
+}
+
+function saveGame() {
+  try {
+    const data = {
+      stamina: game.stamina, hunger: game.hunger, warmth: game.warmth,
+      rep: game.rep, gold: game.gold, wood: game.wood,
+      horseFound: game.horseFound, wagonFixed: game.wagonFixed,
+      chapter2Started: game.chapter2Started,
+      inv: game.inv, journal: game.journal,
+      quest: game.quest,
+      pos: { x: horse.position.x, z: horse.position.z },
+      timeOfDay: state.timeOfDay,
+    };
+    localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+  } catch (_) {}
+}
+
+function loadGame() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return false;
+    const data = JSON.parse(raw);
+    Object.assign(game, {
+      stamina: data.stamina ?? 100, hunger: data.hunger ?? 80, warmth: data.warmth ?? 70,
+      rep: data.rep ?? 0, gold: data.gold ?? 12, wood: data.wood ?? 0,
+      horseFound: !!data.horseFound, wagonFixed: !!data.wagonFixed,
+      chapter2Started: !!data.chapter2Started,
+      inv: data.inv || game.inv, journal: data.journal || [],
+    });
+    if (data.quest) {
+      game.quest = data.quest;
+      document.getElementById('quest-tracker').style.display = 'block';
+      document.getElementById('q-title').textContent = data.quest.title;
+      document.getElementById('q-desc').textContent = data.quest.desc;
+    }
+    if (data.pos) {
+      horse.position.x = data.pos.x;
+      horse.position.z = data.pos.z;
+      horse.position.y = heightAt(data.pos.x, data.pos.z);
+    }
+    if (data.timeOfDay != null) state.timeOfDay = data.timeOfDay;
+    refreshInvUI();
+    updateMarkersForQuest();
+    showToast('已读取上次旅途进度');
+    return true;
+  } catch (_) { return false; }
+}
+
+// Input extensions
+window.addEventListener('keydown', (e) => {
+  if (e.code === 'Digit1') selectTool('hand');
+  if (e.code === 'Digit2') selectTool('shovel');
+  if (e.code === 'Digit3') selectTool('net');
+  if (e.code === 'Digit4') selectTool('canvas');
+  if (e.code === 'Digit5') selectTool('scope');
+  if (e.code === 'KeyC') {
+    if (game.tool !== 'canvas') selectTool('canvas');
+    tryUseTool();
+  }
+  if (e.code === 'KeyI') togglePanel('inv-panel');
+  if (e.code === 'KeyJ') togglePanel('journal-panel');
+  if (e.code === 'KeyT') {
+    const order = ['clear', 'rain', 'snow', 'fog'];
+    const i = order.indexOf(state.weather);
+    setWeather(order[(i + 1) % order.length]);
+  }
+  if (e.code === 'Escape' && game.sketching) cancelSketch();
+  if (e.code === 'KeyE' && (game.tool === 'shovel' || game.tool === 'net' || game.tool === 'scope')) {
+    // already handled by tryInteract; also allow tool use without interactable for fish/scope
+  }
+  // Sell shortcut hint when at camp with goods - handled via campfire
+});
+
+// Click panels to close
+['inv-panel', 'journal-panel'].forEach(id => {
+  document.getElementById(id).addEventListener('click', e => {
+    if (e.target.id === id) e.currentTarget.classList.remove('open');
+  });
+});
+
+// Autosave every 20s
+setInterval(saveGame, 20000);
+
+const _updateGame = updateGame;
+updateGame = function(dt) {
+  _updateGame(dt);
+  updateSketch(dt);
+  drawMinimap();
+  // floating quest markers pulse
+  for (const m of game.markers) {
+    m.position.y = heightAt(m.position.x, m.position.z) + 0.15 + Math.sin(performance.now() * 0.004) * 0.12;
+    m.rotation.z += dt * 0.8;
+  }
+};
+
+
+const hadSave = loadGame();
+if (!hadSave) {
+  setQuest('meet', '遇见晨曦旅社', '靠近营地篝火旁的艾琳，按 E 与她交谈。');
+}
 document.getElementById('quest-tracker').style.display = 'block';
+refreshInvUI();
+updateMarkersForQuest();
 
 // Hook game update into horse tick (runs every frame while playing)
 const _updateHorse = updateHorse;
@@ -2094,7 +2791,7 @@ updateHorse = function(dt) {
   updateGame(dt);
 };
 
-window.DAWN = { game, state, horse, scene };
+window.DAWN = { game, state, horse, scene, saveGame, loadGame, selectTool };
 
 
 // Expose for debug
