@@ -9,18 +9,33 @@ python3 -m http.server 8080
 ```
 
 - 设计文档：http://localhost:8080/index.html
-- 试玩 Demo：http://localhost:8080/demo.html
+- **3D 试玩**：http://localhost:8080/demo3d.html
+- 2D 试玩：http://localhost:8080/demo.html
 
 ## 项目结构
 
 ```
 ├── index.html      # 游戏设计文档（交互式）
-├── demo.html       # 第一章试玩 Demo
+├── demo3d.html     # 3D 开放世界试玩（Three.js）
+├── demo.html       # 2D 第一章试玩
 ├── js/
-│   ├── data.js     # 游戏数据（任务、NPC、对话、地图）
-│   └── engine.js   # Demo 游戏引擎
+│   ├── data.js     # 2D 游戏数据
+│   └── engine.js   # 2D 引擎
 └── README.md
 ```
+
+## 3D 试玩操作
+
+| 操作 | 功能 |
+|------|------|
+| WASD | 骑马移动 |
+| 鼠标 | 环视 |
+| Shift | 疾驰 |
+| Space | 跨越 |
+| E | 与 NPC / 营地互动 |
+| F / G | 加速 / 倒退时间 |
+| 1-4 | 切换天气 |
+| R | 返回营地 |
 
 ## 设计文档功能
 
