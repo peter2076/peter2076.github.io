@@ -913,6 +913,124 @@
     .hero h1 { letter-spacing: 3px; }
     .hero-meta { flex-direction: column; align-items: center; }
   }
+
+  /* Demo banner */
+  .demo-banner {
+    background: linear-gradient(135deg, rgba(107,124,94,0.2), rgba(212,168,83,0.12));
+    border: 1px solid var(--gold);
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin: 0 auto 40px;
+    max-width: 960px;
+  }
+  .demo-banner h3 {
+    font-family: 'Noto Serif SC', serif;
+    color: var(--gold-light);
+    font-size: 1.15rem;
+    margin-bottom: 6px;
+  }
+  .demo-banner p { font-size: 0.88rem; color: var(--text-muted); }
+  .demo-banner .btn { flex-shrink: 0; }
+
+  /* Interactive map */
+  .map-container {
+    position: relative;
+    background: linear-gradient(180deg, #2a3a4a 0%, #1a2830 40%, #3a4a30 100%);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    cursor: crosshair;
+  }
+  .map-region {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: rgba(212,168,83,0.2);
+    border: 2px solid rgba(212,168,83,0.5);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.25s;
+    z-index: 2;
+  }
+  .map-region:hover, .map-region.active {
+    background: rgba(212,168,83,0.4);
+    border-color: var(--gold);
+    transform: translate(-50%, -50%) scale(1.15);
+    box-shadow: 0 0 20px rgba(212,168,83,0.3);
+  }
+  .map-region.locked { opacity: 0.4; border-style: dashed; }
+  .map-info {
+    margin-top: 20px;
+    padding: 20px 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    min-height: 100px;
+  }
+  .map-info h4 { color: var(--gold-light); font-family: 'Noto Serif SC', serif; margin-bottom: 8px; }
+  .map-info p { font-size: 0.88rem; color: var(--text-muted); }
+
+  /* Survival simulator */
+  .simulator {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .sim-controls { display: flex; flex-direction: column; gap: 18px; }
+  .sim-slider label {
+    display: flex; justify-content: space-between;
+    font-size: 0.85rem; color: var(--text-muted); margin-bottom: 6px;
+  }
+  .sim-slider label span { color: var(--gold-light); font-weight: 500; }
+  .sim-slider input[type=range] {
+    width: 100%; accent-color: var(--gold);
+    cursor: pointer;
+  }
+  .sim-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .sim-actions button {
+    padding: 8px 16px;
+    background: rgba(212,168,83,0.1);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .sim-actions button:hover { background: rgba(212,168,83,0.2); border-color: var(--gold); }
+  .sim-display {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    text-align: center;
+  }
+  .sim-avatar { font-size: 4rem; margin-bottom: 12px; }
+  .sim-status-text {
+    font-size: 0.95rem;
+    color: var(--gold-light);
+    font-family: 'Noto Serif SC', serif;
+    margin-bottom: 16px;
+    min-height: 28px;
+  }
+  .sim-bars { display: flex; flex-direction: column; gap: 10px; }
+  .sim-bar-row { display: flex; align-items: center; gap: 10px; font-size: 0.78rem; }
+  .sim-bar-row .label { width: 36px; color: var(--text-muted); }
+  .sim-bar-track { flex: 1; height: 8px; background: rgba(0,0,0,0.3); border-radius: 4px; overflow: hidden; }
+  .sim-bar-fill { height: 100%; border-radius: 4px; transition: width 0.3s; }
+
+  @media (max-width: 700px) {
+    .simulator { grid-template-columns: 1fr; }
+    .demo-banner { flex-direction: column; text-align: center; }
+  }
 </style>
 </head>
 <body>
@@ -935,6 +1053,9 @@
       <li><a href="#sidequests"><span class="icon">✨</span>支线奇遇</a></li>
       <li><a href="#systems"><span class="icon">⚙️</span>玩法系统</a></li>
       <li><a href="#comparison"><span class="icon">📋</span>功能对照表</a></li>
+      <li><a href="#map"><span class="icon">🗺️</span>世界地图</a></li>
+      <li><a href="#simulator"><span class="icon">📊</span>状态模拟</a></li>
+      <li><a href="demo.html" style="color: var(--gold);"><span class="icon">🎮</span>试玩 Demo</a></li>
     </ul>
     <div class="nav-footer">
       原创西部心灵冒险<br />
@@ -957,10 +1078,20 @@
           <span>开放世界</span>
         </div>
         <div class="hero-cta">
-          <a href="#protagonist" class="btn btn-primary">认识主角</a>
+          <a href="demo.html" class="btn btn-primary">🎮 试玩 Demo</a>
+          <a href="#protagonist" class="btn btn-ghost">认识主角</a>
           <a href="#mainstory" class="btn btn-ghost">浏览剧情</a>
         </div>
       </div>
+    </div>
+
+    <!-- Demo Banner -->
+    <div class="demo-banner" style="padding: 0 40px;">
+      <div>
+        <h3>🎮 第一章试玩 Demo 已上线</h3>
+        <p>在平原牧场遇见晨曦旅社，体验帮修马车、寻回走失马匹、篝火露营等核心玩法。零战斗，纯探索。</p>
+      </div>
+      <a href="demo.html" class="btn btn-primary">立即试玩</a>
     </div>
 
     <!-- Worldview -->
@@ -1548,6 +1679,80 @@
       </div>
     </section>
 
+    <!-- Interactive Map -->
+    <section id="map">
+      <div class="section-header">
+        <div class="label">World Map</div>
+        <h2>交互式世界地图</h2>
+        <p>点击地图上的区域标记，查看各地貌特色与关联任务。Demo 中可探索哈登平原区域。</p>
+      </div>
+
+      <div class="map-container" id="worldMap">
+        <div class="map-region active" data-region="plain" style="left:42%;top:55%">🌾</div>
+        <div class="map-region" data-region="town" style="left:62%;top:48%">🏘️</div>
+        <div class="map-region" data-region="swamp" style="left:75%;top:62%">🌿</div>
+        <div class="map-region" data-region="snow" style="left:55%;top:22%">🏔️</div>
+        <div class="map-region" data-region="forest" style="left:30%;top:40%">🌲</div>
+        <div class="map-region" data-region="desert" style="left:18%;top:65%">🏜️</div>
+        <div class="map-region" data-region="mine" style="left:80%;top:35%">⛏️</div>
+      </div>
+
+      <div class="map-info" id="mapInfo">
+        <h4>🌾 哈登平原</h4>
+        <p>广袤的牧场平原，晨曦旅社因马车故障在此停留。第一章「旷野初遇」的主要场景，可体验帮修马车、寻回走失马匹等任务。Demo 可玩。</p>
+      </div>
+    </section>
+
+    <!-- Survival Simulator -->
+    <section id="simulator">
+      <div class="section-header">
+        <div class="label">Survival Simulator</div>
+        <h2>生存状态模拟器</h2>
+        <p>拖动滑块调整角色状态，点击行动按钮模拟野外生存体验。了解各项数值如何互相影响。</p>
+      </div>
+
+      <div class="simulator">
+        <div class="sim-controls">
+          <div class="sim-slider">
+            <label>体力 <span id="valStamina">80</span></label>
+            <input type="range" id="slStamina" min="0" max="100" value="80" />
+          </div>
+          <div class="sim-slider">
+            <label>饱腹 <span id="valHunger">70</span></label>
+            <input type="range" id="slHunger" min="0" max="100" value="70" />
+          </div>
+          <div class="sim-slider">
+            <label>温暖 <span id="valWarmth">60</span></label>
+            <input type="range" id="slWarmth" min="0" max="100" value="60" />
+          </div>
+          <div class="sim-slider">
+            <label>疲惫 <span id="valFatigue">30</span></label>
+            <input type="range" id="slFatigue" min="0" max="100" value="30" />
+          </div>
+          <div class="sim-actions">
+            <button data-action="walk">🚶 行走</button>
+            <button data-action="camp">🔥 篝火休息</button>
+            <button data-action="eat">🍖 进食</button>
+            <button data-action="drink">💧 喝水</button>
+            <button data-action="ride">🐴 骑马</button>
+            <button data-action="draw">🎨 写生</button>
+            <button data-action="cold">❄️ 受寒</button>
+            <button data-action="reset">↺ 重置</button>
+          </div>
+        </div>
+        <div class="sim-display">
+          <div class="sim-avatar" id="simAvatar">🧭</div>
+          <div class="sim-status-text" id="simStatus">状态良好，可以继续前行。</div>
+          <div class="sim-bars">
+            <div class="sim-bar-row"><span class="label">体力</span><div class="sim-bar-track"><div class="sim-bar-fill" id="barStamina" style="width:80%;background:#6b9e5a"></div></div></div>
+            <div class="sim-bar-row"><span class="label">饱腹</span><div class="sim-bar-track"><div class="sim-bar-fill" id="barHunger" style="width:70%;background:#d4a853"></div></div></div>
+            <div class="sim-bar-row"><span class="label">温暖</span><div class="sim-bar-track"><div class="sim-bar-fill" id="barWarmth" style="width:60%;background:#c47840"></div></div></div>
+            <div class="sim-bar-row"><span class="label">精力</span><div class="sim-bar-track"><div class="sim-bar-fill" id="barEnergy" style="width:70%;background:#7a9eb5"></div></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <footer>
       <p>《远风归途》游戏设计文档 · 原创 12+ 西部心灵冒险开放世界</p>
       <p style="margin-top: 6px; opacity: 0.6;">Distant Wind: The Way Home · Game Design Document · 1899 American West</p>
@@ -1617,6 +1822,89 @@
       document.querySelector(`[data-panel="${target}"]`).classList.add('active');
     });
   });
+
+  // World map
+  const mapData = {
+    plain:  { name: '哈登平原', desc: '广袤的牧场平原，晨曦旅社因马车故障在此停留。第一章「旷野初遇」的主要场景，可体验帮修马车、寻回走失马匹等任务。', demo: true },
+    town:   { name: '橡树镇', desc: '宁静的沿河小镇，第二章「河湾小镇」舞台。晨曦旅社计划在此安顿，却需与白杨族协调土地使用。', chapter: 2 },
+    swamp:  { name: '芦苇湾', desc: '候鸟栖息的湿地沼泽，第三章「湿地之歌」。铁路公司的不合理伐木计划威胁着这里的生态平衡。', chapter: 3 },
+    snow:   { name: '银松坡', desc: '雪山脚下的松林坡地，第四章「雪山边缘」。冬季风暴考验着社群的坚韧与互助精神。', chapter: 4 },
+    forest: { name: '橡树溪', desc: '茂密的原始森林，支线「被困的小鹿」发生地。可采集草药、观测野生动物。', side: true },
+    desert: { name: '日落隘口', desc: '荒漠边缘的峡谷隘口，支线「迷途的旅人」场景。分享水囊、指引方向可获得声望。', side: true },
+    mine:   { name: '铜溪镇', desc: '矿业城镇遗迹，支线「铁路边的旧照片」。走访老人、拼凑记忆，帮寻回四十年前的青春。', side: true },
+  };
+
+  document.querySelectorAll('.map-region').forEach(pin => {
+    pin.addEventListener('click', () => {
+      document.querySelectorAll('.map-region').forEach(p => p.classList.remove('active'));
+      pin.classList.add('active');
+      const d = mapData[pin.dataset.region];
+      const tags = [];
+      if (d.demo) tags.push('<span class="tag tag-new">Demo 可玩</span>');
+      if (d.chapter) tags.push(`<span class="tag tag-keep">第${d.chapter}章</span>`);
+      if (d.side) tags.push('<span class="tag tag-replace">支线</span>');
+      document.getElementById('mapInfo').innerHTML =
+        `<h4>${pin.textContent} ${d.name}</h4><p>${d.desc}</p><div style="margin-top:10px">${tags.join(' ')}</div>`;
+    });
+  });
+
+  // Survival simulator
+  const sim = { stamina: 80, hunger: 70, warmth: 60, fatigue: 30 };
+  const slStamina = document.getElementById('slStamina');
+  const slHunger = document.getElementById('slHunger');
+  const slWarmth = document.getElementById('slWarmth');
+  const slFatigue = document.getElementById('slFatigue');
+
+  function updateSim() {
+    document.getElementById('valStamina').textContent = sim.stamina;
+    document.getElementById('valHunger').textContent = sim.hunger;
+    document.getElementById('valWarmth').textContent = sim.warmth;
+    document.getElementById('valFatigue').textContent = sim.fatigue;
+    document.getElementById('barStamina').style.width = sim.stamina + '%';
+    document.getElementById('barHunger').style.width = sim.hunger + '%';
+    document.getElementById('barWarmth').style.width = sim.warmth + '%';
+    document.getElementById('barEnergy').style.width = (100 - sim.fatigue) + '%';
+    slStamina.value = sim.stamina;
+    slHunger.value = sim.hunger;
+    slWarmth.value = sim.warmth;
+    slFatigue.value = sim.fatigue;
+
+    const status = document.getElementById('simStatus');
+    const avatar = document.getElementById('simAvatar');
+    if (sim.stamina < 20) { status.textContent = '体力耗尽，需要休息。'; avatar.textContent = '😓'; }
+    else if (sim.hunger < 20) { status.textContent = '饥肠辘辘，找些食物吧。'; avatar.textContent = '😣'; }
+    else if (sim.warmth < 20) { status.textContent = '寒冷刺骨，靠近篝火或添衣。'; avatar.textContent = '🥶'; }
+    else if (sim.fatigue > 80) { status.textContent = '疲惫不堪，需要好好睡一觉。'; avatar.textContent = '😴'; }
+    else if (sim.stamina > 70 && sim.hunger > 60) { status.textContent = '状态良好，可以继续前行。'; avatar.textContent = '🧭'; }
+    else { status.textContent = '状态一般，注意补充体力。'; avatar.textContent = '🚶'; }
+  }
+
+  [slStamina, slHunger, slWarmth, slFatigue].forEach(sl => {
+    sl.addEventListener('input', () => {
+      sim.stamina = +slStamina.value;
+      sim.hunger = +slHunger.value;
+      sim.warmth = +slWarmth.value;
+      sim.fatigue = +slFatigue.value;
+      updateSim();
+    });
+  });
+
+  const actions = {
+    walk:   () => { sim.stamina = Math.max(0, sim.stamina - 15); sim.hunger = Math.max(0, sim.hunger - 10); sim.fatigue = Math.min(100, sim.fatigue + 10); },
+    camp:   () => { sim.stamina = Math.min(100, sim.stamina + 30); sim.fatigue = Math.max(0, sim.fatigue - 25); sim.warmth = Math.min(100, sim.warmth + 20); },
+    eat:    () => { sim.hunger = Math.min(100, sim.hunger + 35); sim.stamina = Math.min(100, sim.stamina + 5); },
+    drink:  () => { sim.stamina = Math.min(100, sim.stamina + 10); },
+    ride:   () => { sim.stamina = Math.max(0, sim.stamina - 8); sim.fatigue = Math.min(100, sim.fatigue + 5); },
+    draw:   () => { sim.fatigue = Math.min(100, sim.fatigue + 8); sim.stamina = Math.max(0, sim.stamina - 5); },
+    cold:   () => { sim.warmth = Math.max(0, sim.warmth - 30); sim.stamina = Math.max(0, sim.stamina - 10); },
+    reset:  () => { sim.stamina = 80; sim.hunger = 70; sim.warmth = 60; sim.fatigue = 30; },
+  };
+
+  document.querySelectorAll('[data-action]').forEach(btn => {
+    btn.addEventListener('click', () => { actions[btn.dataset.action](); updateSim(); });
+  });
+
+  updateSim();
 </script>
 </body>
 </html>

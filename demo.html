@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+<title>远风归途 · 试玩 Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Noto+Serif+SC:wght@400;600&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --gold: #d4a853;
+    --gold-light: #e8c878;
+    --bg: #1a1410;
+    --text: #e8dcc8;
+    --muted: rgba(232,220,200,0.6);
+    --border: rgba(212,168,83,0.25);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #000; font-family: 'Source Sans 3', sans-serif; color: var(--text); }
+
+  #gameCanvas { display: block; width: 100vw; height: 100vh; cursor: crosshair; }
+
+  /* Start screen */
+  #startScreen {
+    position: fixed; inset: 0; z-index: 200;
+    background: radial-gradient(ellipse at center, rgba(30,22,14,0.95), rgba(0,0,0,0.98));
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    transition: opacity 0.6s;
+  }
+  #startScreen.hidden { opacity: 0; pointer-events: none; }
+
+  #startScreen h1 {
+    font-family: 'Cinzel', 'Noto Serif SC', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    color: var(--gold-light);
+    letter-spacing: 6px;
+    margin-bottom: 8px;
+  }
+  #startScreen .chapter {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 1rem;
+    color: var(--muted);
+    margin-bottom: 40px;
+  }
+  #startScreen .start-btn {
+    padding: 14px 48px;
+    background: rgba(212,168,83,0.15);
+    border: 1px solid var(--gold);
+    border-radius: 30px;
+    color: var(--gold-light);
+    font-size: 0.95rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.25s;
+    font-family: inherit;
+  }
+  #startScreen .start-btn:hover { background: rgba(212,168,83,0.3); transform: scale(1.04); }
+
+  .controls-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px 32px;
+    margin-top: 36px; font-size: 0.82rem; color: var(--muted);
+  }
+  .controls-grid .key {
+    display: inline-block; padding: 2px 8px;
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 4px; font-family: monospace; font-size: 0.75rem; color: var(--gold-light);
+  }
+  .back-link {
+    position: absolute; top: 20px; left: 20px;
+    color: var(--muted); text-decoration: none; font-size: 0.85rem;
+    padding: 8px 16px; border: 1px solid var(--border); border-radius: 8px;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: var(--gold-light); }
+
+  /* Side panels */
+  #journalPanel, #pausePanel {
+    position: fixed; z-index: 150;
+    background: rgba(20,16,12,0.94);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    backdrop-filter: blur(12px);
+    display: none;
+  }
+  #journalPanel {
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: min(480px, 90vw); max-height: 70vh; overflow-y: auto;
+    padding: 28px;
+  }
+  #journalPanel.open, #pausePanel.open { display: block; }
+
+  #journalPanel h2 {
+    font-family: 'Noto Serif SC', serif;
+    color: var(--gold-light);
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .quest-entry {
+    padding: 14px; margin-bottom: 10px;
+    background: rgba(212,168,83,0.06);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .quest-entry.done { opacity: 0.55; }
+  .quest-entry h4 { color: var(--gold-light); font-size: 0.95rem; margin-bottom: 4px; }
+  .quest-entry p { font-size: 0.82rem; color: var(--muted); }
+  .quest-entry .tag {
+    display: inline-block; margin-top: 6px;
+    padding: 2px 8px; border-radius: 4px; font-size: 0.7rem;
+  }
+  .tag-active { background: rgba(107,158,90,0.25); color: #a8d49a; }
+  .tag-done { background: rgba(122,158,181,0.2); color: #9ec4db; }
+
+  #pausePanel {
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    padding: 36px 48px; text-align: center;
+  }
+  #pausePanel h2 { font-family: 'Noto Serif SC', serif; color: var(--gold-light); margin-bottom: 20px; }
+  #pausePanel button {
+    display: block; width: 200px; margin: 8px auto;
+    padding: 10px; background: rgba(212,168,83,0.1);
+    border: 1px solid var(--border); border-radius: 8px;
+    color: var(--text); font-family: inherit; cursor: pointer;
+    transition: background 0.2s;
+  }
+  #pausePanel button:hover { background: rgba(212,168,83,0.2); }
+
+  /* HUD buttons */
+  .hud-btn {
+    position: fixed; z-index: 50;
+    padding: 8px 14px;
+    background: rgba(20,16,12,0.85);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--muted);
+    font-size: 0.8rem;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+  .hud-btn:hover { color: var(--gold-light); border-color: var(--gold); }
+  #journalBtn { top: 16px; left: 230px; }
+  #pauseBtn { top: 16px; left: 330px; }
+</style>
+</head>
+<body>
+
+<a href="index.html" class="back-link">← 返回设计文档</a>
+
+<div id="startScreen">
+  <h1>远风归途</h1>
+  <div class="chapter">试玩 Demo · 第一章：旷野初遇</div>
+  <button class="start-btn" id="startBtn">开始旅程</button>
+  <div class="controls-grid">
+    <div><span class="key">W A S D</span> 移动</div>
+    <div><span class="key">E</span> 互动 / 对话</div>
+    <div><span class="key">空格</span> 篝火休息</div>
+    <div><span class="key">M</span> 骑马 / 下马</div>
+    <div><span class="key">J</span> 任务日志</div>
+    <div><span class="key">ESC</span> 暂停菜单</div>
+  </div>
+</div>
+
+<canvas id="gameCanvas"></canvas>
+
+<button class="hud-btn" id="journalBtn" style="display:none">📜 日志 (J)</button>
+<button class="hud-btn" id="pauseBtn" style="display:none">⏸ 暂停</button>
+
+<div id="journalPanel">
+  <h2>旅途日志</h2>
+  <div id="journalContent"></div>
+</div>
+
+<div id="pausePanel">
+  <h2>暂停</h2>
+  <button id="resumeBtn">继续游戏</button>
+  <button onclick="location.href='index.html'">返回设计文档</button>
+</div>
+
+<script type="module">
+import { Game } from './js/engine.js';
+import { QUESTS } from './js/data.js';
+
+const canvas = document.getElementById('gameCanvas');
+const game = new Game(canvas);
+window._game = game;
+
+const startScreen = document.getElementById('startScreen');
+const journalPanel = document.getElementById('journalPanel');
+const pausePanel = document.getElementById('pausePanel');
+const journalContent = document.getElementById('journalContent');
+
+document.getElementById('startBtn').addEventListener('click', () => {
+  startScreen.classList.add('hidden');
+  document.getElementById('journalBtn').style.display = 'block';
+  document.getElementById('pauseBtn').style.display = 'block';
+  game.start();
+});
+
+function updateJournal() {
+  let html = '';
+  const all = [...game.quests.active, ...game.quests.completed];
+  if (!all.length) {
+    html = '<p style="color:var(--muted);font-size:0.9rem">与晨曦旅社的艾琳交谈，开启你的第一段旅程。</p>';
+  }
+  game.quests.active.forEach(id => {
+    const q = QUESTS[id];
+    html += `<div class="quest-entry"><h4>📜 ${q?.title}</h4><p>${q?.desc}</p><span class="tag tag-active">进行中</span></div>`;
+  });
+  game.quests.completed.forEach(id => {
+    const q = QUESTS[id];
+    html += `<div class="quest-entry done"><h4>✅ ${q?.title}</h4><p>${q?.desc}</p><span class="tag tag-done">已完成</span></div>`;
+  });
+  journalContent.innerHTML = html;
+}
+
+game.onQuestChange = updateJournal;
+
+document.getElementById('journalBtn').addEventListener('click', () => {
+  updateJournal();
+  journalPanel.classList.toggle('open');
+  pausePanel.classList.remove('open');
+});
+
+document.getElementById('pauseBtn').addEventListener('click', () => {
+  game.paused = true;
+  pausePanel.classList.add('open');
+});
+
+document.getElementById('resumeBtn').addEventListener('click', () => {
+  game.paused = false;
+  pausePanel.classList.remove('open');
+});
+
+window.addEventListener('keydown', e => {
+  if (e.code === 'KeyJ' && !game.dialogue) {
+    updateJournal();
+    journalPanel.classList.toggle('open');
+  }
+  if (e.code === 'Escape' && game.paused) {
+    pausePanel.classList.toggle('open');
+    if (!pausePanel.classList.contains('open')) game.paused = false;
+  }
+});
+
+journalPanel.addEventListener('click', e => {
+  if (e.target === journalPanel) journalPanel.classList.remove('open');
+});
+</script>
+</body>
+</html>
